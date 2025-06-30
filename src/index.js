@@ -2,10 +2,31 @@ import { createProject, createTodo, projects } from "./createTodo.js";
 import "./style.css";
 import renderAllTodos from "./all.js";
 import renderCompletedTodos from "./completed.js";
+import renderTodayTodos from "./today.js";
+import renderUpcomingTodos from "./upcoming.js";
+import renderDelayedTodos from "./delayed.js";
 
-const btnCreate = document.querySelector(".btn");
+function saveProjectsToLocalStorage() {
+  localStorage.setItem("projects", JSON.stringify(projects));
+}
+function loadProjectsFromLocalStorage() {
+  const data = localStorage.getItem("projects");
+  if (data) {
+    const parsed = JSON.parse(data);
+    projects.length = 0;
+    parsed.forEach((p) => projects.push(p));
+  }
+}
+loadProjectsFromLocalStorage();
+renderAllTodos();
 
-let editing = null;
+export const btnCreate = document.querySelector(".btn");
+
+export let editing = null;
+export function setEditing(value) {
+  editing = value;
+}
+export let modalOverlay = null;
 
 btnCreate.addEventListener("click", () => {
   const modalOverlay = document.createElement("div");
@@ -418,10 +439,18 @@ btnCreate.addEventListener("click", () => {
     form.reset();
     inputCreatedAt.value = new Date().toISOString().split("T")[0];
     modalOverlay.remove();
+    saveProjectsToLocalStorage();
   });
 });
 
 const allBtn = document.querySelector(".left button:nth-child(1)");
 const completedBtn = document.querySelector(".left button:last-child");
+const todayBtn = document.querySelector(".left button:nth-child(2)");
+const upcomingBtn = document.querySelector(".left button:nth-child(3)");
+const delayedBtn = document.querySelector(".left button:nth-child(4)");
+
+todayBtn.addEventListener("click", renderTodayTodos);
+upcomingBtn.addEventListener("click", renderUpcomingTodos);
+delayedBtn.addEventListener("click", renderDelayedTodos);
 allBtn.addEventListener("click", renderAllTodos);
 completedBtn.addEventListener("click", renderCompletedTodos);
