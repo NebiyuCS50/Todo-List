@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 body {
-  margin: 2px;
+  margin: 0;
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
@@ -75,24 +75,26 @@ button:active {
 }
 
 .left {
-  height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  width: 100%;
+  overflow-y: auto;
   border: none;
   background: none;
   cursor: pointer;
   text-align: left;
   font-size: 16px;
-  background-color: #eee;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
   padding-top: 30px;
 }
 .container {
   display: grid;
   grid-template-columns: 250px 1fr;
+  min-height: 100vh;
 }
 h1 {
   text-align: center;
@@ -445,8 +447,9 @@ h1 {
   max-width: 100%;
   padding: 20px 25px;
   border-radius: 20px;
-  background: #e0e0e0;
-  box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(1px);
+  box-shadow: 3px 3px 8px #bebebe, -3px -3px 8px #ffffff;
   word-break: break-word;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
@@ -454,7 +457,7 @@ h1 {
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 20px 20px 40px #bebebe, -20px -20px 40px #ffffff;
+  box-shadow: 3px 3px 8px #bebebe, -3px -3px 8px #ffffff;
 }
 .card-project {
   font-size: 1.5rem;
@@ -478,6 +481,7 @@ h1 {
   padding: 10px;
   background-color: #f3f4f6;
   border-radius: 10px;
+  font-weight: 400;
 }
 
 .card-created-at,
@@ -488,6 +492,7 @@ h1 {
   margin: 4px 0;
   padding-left: 8px;
   border-left: 4px solid #966919;
+  font-weight: 400;
 }
 .form-right {
   display: grid;
@@ -498,6 +503,7 @@ h1 {
   padding: 0 20px;
   max-width: 1200px;
   box-sizing: border-box;
+  height: auto;
 }
 
 .input-select {
