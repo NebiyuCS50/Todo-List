@@ -66,7 +66,8 @@ btnCreate.addEventListener("click", () => {
   inputCreatedAt.placeholder = "Created At";
   inputCreatedAt.name = "createdAt";
   inputCreatedAt.classList.add("input");
-  inputCreatedAt.value = new Date().toISOString().split("T")[0]; // Set to today's date
+  inputCreatedAt.value = new Date().toISOString().split("T")[0];
+  inputCreatedAt.readOnly = true;
 
   const inputPriority = document.createElement("label");
   inputPriority.classList.add("label");
@@ -228,6 +229,7 @@ btnCreate.addEventListener("click", () => {
       const cardCreatedAt = document.createElement("p");
       cardCreatedAt.classList.add("card-created-at");
       cardCreatedAt.textContent = `Created At: ${inputCreatedAt.value}`;
+      cardCreatedAt.style.pointerEvents = "none";
 
       const cardDueDate = document.createElement("p");
       cardDueDate.classList.add("card-due-date");
@@ -268,6 +270,7 @@ btnCreate.addEventListener("click", () => {
         } else {
           span2.style.color = "";
         }
+        saveProjectsToLocalStorage();
       });
       cardCompleted.appendChild(input);
       cardCompleted.appendChild(span);
@@ -289,8 +292,8 @@ btnCreate.addEventListener("click", () => {
         const foundTodo = foundProject?.todos.find((t) => t.id === todoId);
         if (foundTodo) {
           editing = { project: foundProject, todo: foundTodo, card };
-          modalOverlay.remove(); // Close current modal
-          btnCreate.click(); // Open modal in edit mode
+          modalOverlay.remove();
+          btnCreate.click();
         }
       });
 
@@ -417,6 +420,7 @@ btnCreate.addEventListener("click", () => {
         });
 
         card.remove();
+        saveProjectsToLocalStorage();
       });
       svg.appendChild(line4);
       buttonIcon.appendChild(svg);
