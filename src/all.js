@@ -1,9 +1,11 @@
+import { projects } from "./createTodo.js";
+import { btnCreate, setEditing, modalOverlay } from "./index.js"; // Adjust imports as needed
+
 export default function renderAllTodos() {
   const container_right = document.querySelector(".form-right");
   container_right.textContent = "";
   projects.forEach((project) => {
     project.todos.forEach((todo) => {
-      const container_right = document.querySelector(".form-right");
       const card = document.createElement("div");
       card.classList.add("card");
       card.dataset.todoId = todo.id;
@@ -22,7 +24,7 @@ export default function renderAllTodos() {
 
       const cardCreatedAt = document.createElement("p");
       cardCreatedAt.classList.add("card-created-at");
-      cardCreatedAt.textContent = `Created At: ${todo.createdAt}`;
+      cardCreatedAt.textContent = `Created At: ${todo.createdAt || ""}`;
 
       const cardDueDate = document.createElement("p");
       cardDueDate.classList.add("card-due-date");
@@ -44,50 +46,47 @@ export default function renderAllTodos() {
         cardPriority.classList.add("priority-high");
       }
 
+      // Completed checkbox
       const cardCompleted = document.createElement("label");
       cardCompleted.classList.add("checkbox-container");
       const input = document.createElement("input");
       input.classList.add("custom-checkbox");
-      input.checked = !!todo.completed;
       input.type = "checkbox";
+      input.checked = !!todo.completed;
       const span = document.createElement("span");
       span.classList.add("checkmark");
       const span2 = document.createElement("span");
       span2.classList.add("checkmark2");
       span2.textContent = "Completed";
+      if (todo.completed) span2.style.color = "#4CAF50";
       input.addEventListener("change", () => {
         todo.completed = input.checked;
-        if (input.checked) {
-          span2.style.color = "#4CAF50";
-        } else {
-          span2.style.color = "";
-        }
+        span2.style.color = input.checked ? "#4CAF50" : "";
       });
       cardCompleted.appendChild(input);
       cardCompleted.appendChild(span);
       cardCompleted.appendChild(span2);
 
+      // Card buttons
       const cardButtons = document.createElement("div");
       cardButtons.classList.add("card-buttons");
 
+      // Edit button
       const editBtn = document.createElement("button");
       editBtn.classList.add("Btn-edit");
       editBtn.dataset.todoId = todo.id;
       editBtn.textContent = "Edit";
       editBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        const todoId = Number(editBtn.dataset.todoId);
-        const foundProject = projects.find((p) =>
-          p.todos.some((t) => t.id === todoId)
-        );
-        const foundTodo = foundProject?.todos.find((t) => t.id === todoId);
-        if (foundTodo) {
-          editing = { project: foundProject, todo: foundTodo, card };
+        setEditing({ project, todo, card });
+        if (modalOverlay) {
+          // You may need to define setEditing in index.js and export it
           modalOverlay.remove();
-          btnCreate.click();
-        }
+        } // Close current modal
+        btnCreate.click(); // Open modal in edit mode
       });
 
+      // Pencil icon (SVG)
       const pencilIcon = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "svg"
@@ -105,6 +104,7 @@ export default function renderAllTodos() {
       pencilIcon.appendChild(path);
       editBtn.appendChild(pencilIcon);
 
+      // Delete button
       const deleteButton = document.createElement("button");
       deleteButton.setAttribute("type", "button");
       deleteButton.classList.add("button");
@@ -202,20 +202,19 @@ export default function renderAllTodos() {
         "style",
         "fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
       );
-      deleteButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        const todoId = Number(deleteButton.dataset.todoId);
-
-        projects.forEach((project) => {
-          project.todos = project.todos.filter((t) => t.id !== todoId);
-        });
-
-        card.remove();
-      });
       svg.appendChild(line4);
       buttonIcon.appendChild(svg);
       deleteButton.appendChild(buttonText);
       deleteButton.appendChild(buttonIcon);
+
+      deleteButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        const todoId = Number(deleteButton.dataset.todoId);
+        projects.forEach((project) => {
+          project.todos = project.todos.filter((t) => t.id !== todoId);
+        });
+        card.remove();
+      });
 
       card.appendChild(cardProject);
       card.appendChild(cardTodo);
