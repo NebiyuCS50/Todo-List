@@ -15,6 +15,9 @@ body {
     no-repeat center center fixed;
   background-size: cover;
 }
+h1 {
+  color: #333;
+}
 
 .left button {
   width: 100%;
