@@ -1,5 +1,7 @@
 import { createProject, createTodo, projects } from "./createTodo.js";
 import "./style.css";
+import renderAllTodos from "./all.js";
+import renderCompletedTodos from "./completed.js";
 
 const btnCreate = document.querySelector(".btn");
 
@@ -50,6 +52,7 @@ btnCreate.addEventListener("click", () => {
   inputPriority.textContent = "Priority";
   const inputPrioritySelect = document.createElement("select");
   inputPrioritySelect.classList.add("input-select");
+
   const optionLow = document.createElement("option");
   optionLow.classList.add("option-low");
   optionLow.value = "low";
@@ -64,6 +67,23 @@ btnCreate.addEventListener("click", () => {
   optionHigh.classList.add("option-high");
   optionHigh.value = "high";
   optionHigh.textContent = "High";
+
+  inputPrioritySelect.addEventListener("change", () => {
+    inputPrioritySelect.classList.remove(
+      "priority-low",
+      "priority-medium",
+      "priority-high"
+    );
+
+    const value = inputPrioritySelect.value;
+    if (value === "low") {
+      inputPrioritySelect.classList.add("priority-low");
+    } else if (value === "medium") {
+      inputPrioritySelect.classList.add("priority-medium");
+    } else if (value === "high") {
+      inputPrioritySelect.classList.add("priority-high");
+    }
+  });
 
   inputPrioritySelect.appendChild(optionLow);
   inputPrioritySelect.appendChild(optionMedium);
@@ -139,6 +159,20 @@ btnCreate.addEventListener("click", () => {
       editing.card.querySelector(
         ".card-priority"
       ).textContent = `Priority: ${todoPriority}`;
+      const cardPriorityElem = editing.card.querySelector(".card-priority");
+      cardPriorityElem.textContent = `Priority: ${todoPriority}`;
+      cardPriorityElem.classList.remove(
+        "priority-low",
+        "priority-medium",
+        "priority-high"
+      );
+      if (todoPriority === "low") {
+        cardPriorityElem.classList.add("priority-low");
+      } else if (todoPriority === "medium") {
+        cardPriorityElem.classList.add("priority-medium");
+      } else if (todoPriority === "high") {
+        cardPriorityElem.classList.add("priority-high");
+      }
 
       editing = null;
     } else {
@@ -181,6 +215,19 @@ btnCreate.addEventListener("click", () => {
       const cardPriority = document.createElement("p");
       cardPriority.classList.add("card-priority");
       cardPriority.textContent = `Priority: ${todoPriority}`;
+      cardPriority.textContent = `Priority: ${todoPriority}`;
+      cardPriority.classList.remove(
+        "priority-low",
+        "priority-medium",
+        "priority-high"
+      );
+      if (todoPriority === "low") {
+        cardPriority.classList.add("priority-low");
+      } else if (todoPriority === "medium") {
+        cardPriority.classList.add("priority-medium");
+      } else if (todoPriority === "high") {
+        cardPriority.classList.add("priority-high");
+      }
 
       const cardCompleted = document.createElement("label");
       cardCompleted.classList.add("checkbox-container");
@@ -194,6 +241,7 @@ btnCreate.addEventListener("click", () => {
       span2.classList.add("checkmark2");
       span2.textContent = "Completed";
       input.addEventListener("change", () => {
+        todo.completed = input.checked;
         if (input.checked) {
           span2.style.color = "#4CAF50";
         } else {
@@ -372,3 +420,8 @@ btnCreate.addEventListener("click", () => {
     modalOverlay.remove();
   });
 });
+
+const allBtn = document.querySelector(".left button:nth-child(1)");
+const completedBtn = document.querySelector(".left button:last-child");
+allBtn.addEventListener("click", renderAllTodos);
+completedBtn.addEventListener("click", renderCompletedTodos);
