@@ -12,11 +12,26 @@ body {
   padding: 0;
   overflow-x: hidden;
 }
-.long {
-  margin-left: 20px;
+.left button {
+  width: 100%;
+  margin-top: 10px;
+  justify-content: flex-start;
+  padding-left: 20px;
+  border-radius: 8px;
+  background: none;
+  color: #181818;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: none;
+  border: none;
+  transition: background 0.2s;
 }
-.long2 {
-  margin-left: 10px;
+
+.left button:hover {
+  background: #e0e0e0;
 }
 button {
   display: flex;
